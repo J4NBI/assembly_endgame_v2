@@ -11,6 +11,7 @@ import clsx from "clsx";
 // Import Images and JS
 import { languages } from "../languages";
 import dead from "/images/dead.png";
+import html from "/images/html.png";
 import { use} from "react";
 import { germanWords } from "../germanWords";
 
@@ -111,7 +112,7 @@ function App() {
           {showImage.map((item) => (
             <img
               key={nanoid()}
-              src={item.isOn ? item.src : dead}
+              src={item.isOn ? "../assembly_endgame_v2/" + item.src : dead}
               alt={item.title}
               width="80px"
             />
