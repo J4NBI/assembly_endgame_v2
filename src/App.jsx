@@ -1,5 +1,5 @@
 // Imports
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { nanoid } from "nanoid";
 import { generate, count } from "random-words";
 
@@ -34,6 +34,8 @@ function App() {
   const [isChecked, setIsChecked] = useState(true);
 
   const ref = useRef(null);
+  const newRef = useRef(null);
+  const buttonRef = useRef(null);
 
 
   // VARIABLES
@@ -118,17 +120,25 @@ function App() {
     scrollToTop();
   }
 
+  // Focus on New Game Button
+  useEffect(() => {
+    if (isGameWon || isGameLost){
+      buttonRef.current.focus();
+    }
+}, [isGameWon,isGameLost]);
+
+
   return (
     <>
       <main ref={ref}>
         {isGameWon && <Confetti />}
         <Header lang={isChecked}/>
-        <div className="flex items-center space-x-2 mt-4 sm:mt-0">
+        <div ref={buttonRef} className="flex items-center space-x-2 mt-4 sm:mt-0">
           <Switch onClick={handleToggle} className="bg-white inline" id="switch"/>
           <Label className="text-xl" htmlFor="switch">{isChecked ? "English" : "Deutsch"}</Label>
         </div>
         {isGameWon || isGameLost ? <Status won={isGameWon} word={currentWord}/> : null }
-        {isGameWon || isGameLost ? <button onClick={handleNewGame} className="btn-newgame my-8">NEW GAME</button> : null}
+        {isGameWon || isGameLost ? <button ref={buttonRef}  onClick={handleNewGame} className="btn-newgame my-8">NEW GAME</button> : null}
         <section className="languages">
           {showImage.map((item) => (
             <img
