@@ -177,8 +177,7 @@ function App() {
               );
             })}
         </section>
-        
-        <button onClick={scrollToTop}>TOP</button>
+      
       </main>
     </>
   );
