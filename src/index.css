@@ -112,6 +112,10 @@ h1 {
   font-size: 4rem;
   font-weight: 900;
   margin-top: 2rem;
+
+  @media (max-width:500px){
+    margin-top: 1rem;
+  }
 }
 
 header {
@@ -230,7 +234,7 @@ header {
 }
 
 .btn-newgame {
-  font-size: 2rem;
+  font-size: 1rem;
   padding: 1rem 2rem;
   border-radius: 10px;
   background-color: var(--clr-one);

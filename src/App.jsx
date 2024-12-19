@@ -26,7 +26,7 @@ import { Switch } from "@/components/ui/switch"
 function App() {
 
   // STATES
-  const [currentWord, setCurrentWord] = useState(generate());
+  const [currentWord, setCurrentWord] = useState("h");
   const [guessedLetters, setGuessedLetters] = useState([""]);
   const [count, setCount] = useState(0)
   const [showImage, setShowImage] = useState(languages);
@@ -106,13 +106,18 @@ function App() {
     return germanWords[randomNumber].toUpperCase().toLowerCase()
   }
 
-  // Scroll to top of Page
+  // Scroll to top of Page function
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
   };
+
+  // Scroll to top when won
   
-  
+  if (isGameWon) {
+    scrollToTop();
+  }
+
   return (
     <>
       <main ref={ref}>
