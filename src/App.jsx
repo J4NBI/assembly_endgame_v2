@@ -26,7 +26,7 @@ import { Switch } from "@/components/ui/switch"
 function App() {
 
   // STATES
-  const [currentWord, setCurrentWord] = useState("h");
+  const [currentWord, setCurrentWord] = useState(generate());
   const [guessedLetters, setGuessedLetters] = useState([""]);
   const [count, setCount] = useState(0)
   const [showImage, setShowImage] = useState(languages);
