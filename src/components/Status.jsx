@@ -11,12 +11,12 @@ const Status = (props) => {
       {props.won ? (
         <>
           <h2>You win!</h2>
-          <p>Well done! 🎉</p>
+          <p className='text-center' >Well done! 🎉</p>
         </>
       ) : (
         <>
           <h2>Game over!</h2>
-          <p>You lose! Better start learning Assembly 😃</p>
+          <p className='text-center'>You lose! Better start learning Assembly 😃</p>
         </>
       )}
     </section>

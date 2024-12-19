@@ -1,5 +1,5 @@
 // Imports
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { nanoid } from "nanoid";
 import { generate, count } from "random-words";
 
@@ -7,6 +7,7 @@ import { generate, count } from "random-words";
 import Header from "./components/Header";
 import Status from "./components/Status";
 import clsx from "clsx";
+import Confetti from 'react-confetti';
 
 // Import Images and JS
 import { languages } from "../languages";
@@ -32,6 +33,9 @@ function App() {
   const [fails, setFails] = useState(0);
   const [isChecked, setIsChecked] = useState(true);
 
+  const ref = useRef(null);
+
+
   // VARIABLES
   const umlaute = "äöü"
   const alphabet = !isChecked ? "abcdefghijklmnopqrstuvwxyz" + umlaute : "abcdefghijklmnopqrstuvwxyz" ;
@@ -41,6 +45,7 @@ function App() {
   
   // Save guessed Letter in Array(State) guessedLetters and handle Image
   function handleGuess(event) {
+
     setCount(prev => prev + 1);
     let letter = event.currentTarget.id.toLowerCase();
     let newFails = fails;
@@ -66,7 +71,10 @@ function App() {
             return item;
         }
     }));
-
+    
+    if (isGameWon) {
+      scrollToTop();
+    }
     setFails(newFails);
 }
 
@@ -74,10 +82,10 @@ function App() {
 
   function handleNewGame(){
     !isChecked ? setCurrentWord(pickGermanWord()) : setCurrentWord(generate());
-    setGuessedLetters([""])
-    setShowImage(prev => prev.map((item) => ({...item, isOn: true}) ))
-    setFails(0)
-    setCount(0)
+    setGuessedLetters([""]);
+    setShowImage(prev => prev.map((item) => ({...item, isOn: true}) ));
+    setFails(0);
+    setCount(0);
   }
 
   // Toggle Language
@@ -97,17 +105,25 @@ function App() {
     const randomNumber = Math.ceil(Math.random()*germanWords.length)
     return germanWords[randomNumber].toUpperCase().toLowerCase()
   }
-  
 
+  // Scroll to top of Page
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+  };
+  
+  
   return (
     <>
-      <main>
+      <main ref={ref}>
+        {isGameWon && <Confetti />}
         <Header lang={isChecked}/>
         <div className="flex items-center space-x-2 mt-4 sm:mt-0">
           <Switch onClick={handleToggle} className="bg-white inline" id="switch"/>
           <Label className="text-xl" htmlFor="switch">{isChecked ? "English" : "Deutsch"}</Label>
         </div>
         {isGameWon || isGameLost ? <Status won={isGameWon} word={currentWord}/> : null }
+        {isGameWon || isGameLost ? <button onClick={handleNewGame} className="btn-newgame my-8">NEW GAME</button> : null}
         <section className="languages">
           {showImage.map((item) => (
             <img
@@ -133,7 +149,7 @@ function App() {
             ))}
         </section> 
 
-        {isGameWon || isGameLost ? <button onClick={handleNewGame} className="btn-newgame">NEW GAME</button> : null}
+        
 
         <section className="keyboard">
           {alphabet
@@ -162,7 +178,7 @@ function App() {
             })}
         </section>
         
-        
+        <button onClick={scrollToTop}>TOP</button>
       </main>
     </>
   );
