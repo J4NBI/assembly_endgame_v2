@@ -12,8 +12,6 @@ import Confetti from 'react-confetti';
 // Import Images and JS
 import { languages } from "../languages";
 import dead from "/images/dead.png";
-import html from "/images/html.png";
-import { use} from "react";
 import { germanWords } from "../germanWords";
 
 
@@ -44,7 +42,7 @@ function App() {
   const isGameWon = currentWord.split("").every(letter => guessedLetters.includes(letter));
   const isGameLost = fails === 8;
   
-  
+  console.log(guessedLetters[guessedLetters.length -1])
   // Save guessed Letter in Array(State) guessedLetters and handle Image
   function handleGuess(event) {
 
@@ -131,14 +129,32 @@ function App() {
   return (
     <>
       <main ref={ref}>
+
         {isGameWon && <Confetti />}
+
         <Header lang={isChecked}/>
+
         <div ref={buttonRef} className="flex items-center space-x-2 mt-4 sm:mt-0">
-          <Switch onClick={handleToggle} className="bg-white inline" id="switch"/>
+          <Switch onClick={handleToggle} className="" id="switch"/>
           <Label className="text-xl" htmlFor="switch">{isChecked ? "English" : "Deutsch"}</Label>
         </div>
-        {isGameWon || isGameLost ? <Status won={isGameWon} word={currentWord}/> : null }
-        {isGameWon || isGameLost ? <button ref={buttonRef}  onClick={handleNewGame} className="btn-newgame my-8">NEW GAME</button> : null}
+
+        <section className="section-status"
+        aria-live="polite"
+        role="ststus"
+        >
+          {isGameWon || isGameLost ? <Status won={isGameWon} word={currentWord} checked={isChecked}/> : null }
+
+          {isGameWon || isGameLost ? 
+        <button ref={buttonRef}  onClick={handleNewGame} className="btn-newgame my-8">
+        {!isChecked ? "NEUES SPIEL" : "NEW GAME"  }  
+          </button> : null}
+
+        </section>
+       
+
+        
+
         <section className="languages">
           {showImage.map((item) => (
             <img
@@ -148,6 +164,7 @@ function App() {
               width="80px"
             />
           ))}
+
         </section>
 
         <section className="word">
@@ -180,7 +197,10 @@ function App() {
                 wrong: notInWord,
               });
               return (
-                <button
+                <button 
+                  disabled={fails ===  8 || guessedLetters.includes(item)}
+                  aria-disabled={fails === 8}
+                  aria-label={`LETTER ${item}`}
                   onClick={handleGuess}
                   className={btnClass}
                   id={item}
@@ -191,6 +211,27 @@ function App() {
                 </button>
               );
             })}
+        </section>
+
+        {/* Unvisible only for screen readers */}
+
+        <section 
+        className="sr-only"
+        aria-live="polite"
+        role="status"
+        > 
+          <p> {currentWord.includes(guessedLetters[guessedLetters.length -1]) ?
+          `Correct! The letter ${guessedLetters[guessedLetters.length -1]} is in the word.`:
+          `Incorrect. The letter ${guessedLetters[guessedLetters.length -1]} is not in the word.`}
+
+          You have {fails} attempts left.
+
+          </p>
+          <p>Current word {
+            currentWord.split("").map(letter =>
+              guessedLetters.includes(letter.toLowerCase()) ? letter + "." : "blank")
+              .join(" ")}
+          </p>
         </section>
       
       </main>
